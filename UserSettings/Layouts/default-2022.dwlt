@@ -154,7 +154,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 100}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 61
+  controlID: 105
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -394,7 +394,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets
+    - Assets/Arte/Escenario/Hex_Map
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -402,16 +402,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets
+  - Assets/Arte/Escenario/Hex_Map
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\alex_\Desktop\Archivos Unity\EndlessGame
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: ce480000
-    m_LastClickedID: 18638
-    m_ExpandedIDs: 00000000c6480000c8480000ca480000ce48000000ca9a3b
+    m_SelectedIDs: 70080000
+    m_LastClickedID: 2160
+    m_ExpandedIDs: 00000000fe4800000049000002490000044900000849000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -439,7 +439,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000c6480000c8480000ca480000
+    m_ExpandedIDs: 00000000fe480000004900000249000004490000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -466,8 +466,8 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 0
-    m_ExpandedInstanceIDs: c62300002e5a00000e410000ee050000
+    m_HadKeyboardFocusLastEvent: 1
+    m_ExpandedInstanceIDs: c62300002e5a00000e410000ee0500008a08000032490000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -579,9 +579,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 1c470000
-      m_LastClickedID: 18204
-      m_ExpandedIDs: 2cfbffff
+      m_SelectedIDs: 
+      m_LastClickedID: 0
+      m_ExpandedIDs: 56a8ffff9ec6ffff3ee0ffffb0faffff24450000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -935,9 +935,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 5.9312444, y: 0.024698207, z: 7.8491526}
+    m_Target: {x: -1.4763138, y: -10.732983, z: -2.280236}
     speed: 2
-    m_Value: {x: 5.9312444, y: 0.024698207, z: 7.8491526}
+    m_Value: {x: -1.4763138, y: -10.732983, z: -2.280236}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -983,13 +983,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.28409144, y: -0.094739854, z: 0.028183687, w: 0.95373213}
+    m_Target: {x: 0.47095305, y: 0.02115439, z: -0.011330985, w: 0.88188154}
     speed: 2
-    m_Value: {x: 0.28403708, y: -0.09616636, z: 0.028608607, w: 0.9535494}
+    m_Value: {x: 0.46959162, y: 0.022494236, z: -0.0120031405, w: 0.8825155}
   m_Size:
-    m_Target: 9.555904
+    m_Target: 10.145042
     speed: 2
-    m_Value: 7.683705
+    m_Value: 9.708175
   m_Ortho:
     m_Target: 0
     speed: 2
