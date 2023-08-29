@@ -48,10 +48,11 @@ public class GameManager : MonoBehaviour
     // Funcion de Buscar Casillas Caminables
     public void FindWalkableTiles(UnidadesScript unidad)
     {
+        //Limpia las casillas disponibles
         CleanAllowedTiles();
 
         //Activa la Funcion de Encontrar Todas las Casillas
-        AllTiles(unidad);
+        FindAllTiles(unidad);
 
         //Obtener Posicion de la Unidad Seleccionada
 
@@ -102,7 +103,7 @@ public class GameManager : MonoBehaviour
     }
 
     //Funcion de Buscar todas las Casillas
-    private void AllTiles(UnidadesScript unidad)
+    private void FindAllTiles(UnidadesScript unidad)
     {
         //Envia la informacion al TileScript de la Distancia de Checkeo
         foreach (GameObject tile in tiles)

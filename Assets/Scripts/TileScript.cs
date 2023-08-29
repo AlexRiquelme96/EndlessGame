@@ -95,14 +95,18 @@ public class TileScript : MonoBehaviour
         InitializeTiles();
 
         //Se crea un Vector 3 para cada direccion
-        Vector3 top     = new Vector3(0, 0, checkDistance);
-        Vector3 bot     = new Vector3(0, 0, - checkDistance);
-        Vector3 right   = new Vector3(checkDistance, 0, 0);
-        Vector3 left    = new Vector3(- checkDistance, 0, 0);
+        Vector3 topRight    = new Vector3(checkDistance/2, 0, checkDistance * .75f);
+        Vector3 topLeft     = new Vector3(-checkDistance / 2, 0, checkDistance * .75f);
+        Vector3 botRight    = new Vector3(checkDistance / 2, 0, -checkDistance * .75f);
+        Vector3 botLeft     = new Vector3(-checkDistance / 2, 0, -checkDistance * .75f);
+        Vector3 right       = new Vector3(checkDistance, 0, 0);
+        Vector3 left        = new Vector3(- checkDistance, 0, 0);
 
         //Se llama la Funcion para Revisar la Disponibilidad de las Casillas Adyacentes
-        CheckTileArround(top);
-        CheckTileArround(bot);
+        CheckTileArround(topRight);
+        CheckTileArround(topLeft);
+        CheckTileArround(botRight);
+        CheckTileArround(botLeft);
         CheckTileArround(right);
         CheckTileArround(left);
     }
@@ -140,13 +144,21 @@ public class TileScript : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        //Arriba
+        //Arriba Derecha
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(transform.position + new Vector3(0, 0, 2), new Vector3(0.25f, 6f, 0.25f));
+        Gizmos.DrawWireCube(transform.position + new Vector3(1 , 0, 2 * .75f), new Vector3(0.25f, 6f, 0.25f));
 
-        //Abajo
+        //Arriba Izquierda
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(transform.position + new Vector3(-1 , 0, 2 * .75f), new Vector3(0.25f, 6f, 0.25f));
+
+        //Abajo Derecha
         Gizmos.color = Color.white;
-        Gizmos.DrawWireCube(transform.position + new Vector3(0, 0, -2), new Vector3(0.25f, 6f, 0.25f));
+        Gizmos.DrawWireCube(transform.position + new Vector3(1, 0, - 2 * .75f), new Vector3(0.25f, 6f, 0.25f));
+
+        //Abajo Izquierda
+        Gizmos.color = Color.black;
+        Gizmos.DrawWireCube(transform.position + new Vector3(-1, 0, -2 * .75f), new Vector3(0.25f, 6f, 0.25f));
 
         //Derecha
         Gizmos.color = Color.blue;
