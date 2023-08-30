@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    //Singleton
     public static GameManager Instance;
 
     [Header("General Parameters")]
@@ -14,15 +15,18 @@ public class GameManager : MonoBehaviour
 
     [Header("Movement")]
     [SerializeField] TileScript destinationTile;
+    [SerializeField] TileScript activePosition;
 
     GameObject[] tiles;
 
     [SerializeField] List<TileScript> allowedTile = new List<TileScript>();
     Stack<TileScript> calculatedPath = new Stack<TileScript>();
 
+    private void Awake()
+    {
+        Instance = this;
+    }
 
-    [Header("Test")]
-    [SerializeField] TileScript activePosition;
 
 
     private void Start()
@@ -48,6 +52,7 @@ public class GameManager : MonoBehaviour
     // Funcion de Buscar Casillas Caminables
     public void FindWalkableTiles(UnidadesScript unidad)
     {
+        Debug.Log("aqui entra");
         //Limpia las casillas disponibles
         CleanAllowedTiles();
 
@@ -55,8 +60,7 @@ public class GameManager : MonoBehaviour
         FindAllTiles(unidad);
 
         //Obtener Posicion de la Unidad Seleccionada
-
-        //TileScript activePosition = new TileScript();
+        GetActivePosition(unidad);
 
         //Recorrer Casillas Adyacentes y Encontrar Caminos Posibles
 
@@ -64,7 +68,6 @@ public class GameManager : MonoBehaviour
 
         queue.Enqueue(activePosition);
         activePosition.Visited = true;
-        activePosition.Actual = true;
 
         while (queue.Count > 0)
         {
@@ -88,6 +91,12 @@ public class GameManager : MonoBehaviour
             }
         }
 
+    }
+
+    private void GetActivePosition(UnidadesScript unidad)
+    {
+        activePosition = unidad.GetActiveTile();
+        activePosition.Actual = true;
     }
 
     private void CleanAllowedTiles()
@@ -151,8 +160,11 @@ public class GameManager : MonoBehaviour
     internal void BuildDestinationPath()
     {
         if (destinationTile == null) return;
+
         ClearDestinationPath();
+
         TileScript nextTile = destinationTile;
+
         while (nextTile != null)
         {
             if (nextTile == destinationTile)
@@ -175,7 +187,10 @@ public class GameManager : MonoBehaviour
 
     internal void MoveUnitInCalculatedPath(UnidadesScript unidad)
     {
+        //Si no hay camino calculado, no pasa nada
         if (calculatedPath.Count == 0) return;
+
+        unidad.MoveTo(calculatedPath);
 
     }
 }
