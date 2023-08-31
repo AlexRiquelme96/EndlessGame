@@ -6,7 +6,7 @@ using UnityEngine;
 public class HexBoardGenerator : MonoBehaviour
 {
     static int width = 10;
-    static int length = 10;
+    static int length = 13;
     static float cellSize = 2f;
     static float VERTICAL_HEX_OFFSET = .75f;
 

@@ -86,6 +86,9 @@ public class TileScript : MonoBehaviour
         visited = false;
         distance = 0;
         actual = false;
+        destination = false;
+        calculatedPath = false;
+        father = null;
     }
 
     //Funcion para encontrar las Casillas Adyacentes

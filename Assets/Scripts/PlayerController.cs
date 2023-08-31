@@ -6,8 +6,12 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [Header("Selection")]
-    [SerializeField] UnidadesScript playerSelected;
+    [SerializeField] UnidadesScript selectedPlayer;
     [SerializeField] bool playerIsSelected = false;
+    [SerializeField] bool readyToMove = false;
+
+
+    //[Header("Movement")]
 
 
     // Start is called before the first frame update
@@ -23,10 +27,23 @@ public class PlayerController : MonoBehaviour
         {
             if (TryFindPlayer(Input.mousePosition))
             {
-                GameManager.Instance.FindWalkableTiles(playerSelected);
+                GameManager.Instance.FindWalkableTiles(selectedPlayer);
+            }
+            else
+            {
+                if (selectedPlayer != null && selectedPlayer.CanMove()) 
+                {
+                    readyToMove = TryGetDestination(Input.mousePosition);
+                }
             }
         }
+        if (readyToMove)
+        {
+            TryMoveToDestination();
+        }
     }
+
+
 
     // Funcion para intentar seleccionar un personaje
     private bool TryFindPlayer(Vector3 selectionPosition)
@@ -43,10 +60,39 @@ public class PlayerController : MonoBehaviour
             UnidadesScript mayPlayer = hit.collider.GetComponent<UnidadesScript>();
             if (mayPlayer != null)
             {
-                playerSelected = mayPlayer;
+                selectedPlayer = mayPlayer;
                 playerIsSelected = true;
             }
         }
         return playerIsSelected;
+    }
+
+    private bool TryGetDestination(Vector3 selectionPosition)
+    {
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(selectionPosition);
+
+        LayerMask selectionMaskTile = LayerMask.GetMask("Tiles");
+
+        bool destinationSelected = false;
+        TileScript destinationTile = null;
+
+        //Condicional para revisar que es lo que se clickeo
+        if (Physics.Raycast(ray, out hit, selectionMaskTile))
+        {
+            destinationTile = hit.collider.GetComponent<TileScript>();
+            
+        }
+        if (destinationTile != null && destinationTile.Selectable 
+            && selectedPlayer.GetActiveTile() != destinationTile)
+        {
+            destinationSelected = true;
+        }
+        return destinationSelected;
+    }
+
+    private void TryMoveToDestination()
+    {
+        GameManager.Instance.MoveUnitInCalculatedPath(selectedPlayer);
     }
 }

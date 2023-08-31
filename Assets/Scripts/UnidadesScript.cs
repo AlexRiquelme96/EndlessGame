@@ -10,7 +10,11 @@ public class UnidadesScript : MonoBehaviour
     [SerializeField] int maxHP;
     [SerializeField] int moveDistance;
     [SerializeField] int moveSpeed;
-    [SerializeField] bool movedThisTurn = false ;
+
+
+    [Header("Movement")]
+    [SerializeField] bool movedThisTurn = false;
+    [SerializeField] bool playerStuned = false;
 
     [Header("UI")]
     [SerializeField] string unitName;
@@ -26,32 +30,45 @@ public class UnidadesScript : MonoBehaviour
 
         IEnumerator MoveUnitCoroutine()
         {
+            //Debug.Log("entra a la corrutina de movimiento");
             while (path.Count > 0)
             {
                 //Saca el primer elemento del Stack
                 TileScript tile = path.Peek();
 
-                Vector3 nextPosition = tile.transform.position;
+                Vector3 nextPosition = tile.transform.position - new Vector3 (0, tile.transform.position.y, 0);
+                
+                Vector3 playerPosition = transform.position - new Vector3 (0,transform.position.y,0);
 
-                float moveDistance = Vector3.Distance(transform.position, nextPosition);
+                float moveDistance = Vector3.Distance(playerPosition, nextPosition);
+
+                // Debug.Log(moveDistance);
 
                 if (moveDistance >= 0.05f)
                 {
-                    LookForward(nextPosition);
+                    LookForward(nextPosition, playerPosition);
+                    HorizontalSpeedMovement();
 
                     //Que el personaje mire hacia delante
                     transform.forward = lookForward;
-                    transform.position += speed * Time.deltaTime; 
+                    playerPosition += speed * Time.deltaTime; 
                 }
                 else
                 {
-                    transform.position = nextPosition;
+                    playerPosition = nextPosition;
                     path.Pop();
                 }
 
                 yield return null;
             }
         }
+    }
+
+    private void HorizontalSpeedMovement()
+    {
+        Debug.Log("forward" + transform.forward);
+        speed = transform.forward * moveSpeed;
+        Debug.Log("velocidad " + speed);
     }
 
     internal TileScript GetActiveTile()
@@ -70,9 +87,14 @@ public class UnidadesScript : MonoBehaviour
     }
 
     // Calcular hacia donde mira el Personaje
-    private void LookForward(Vector3 nextPosition)
+    private void LookForward(Vector3 nextPosition, Vector3 playerPosition)
     {
-        lookForward = nextPosition - transform.position;
+        lookForward = nextPosition - playerPosition;
         lookForward.Normalize();
+    }
+
+    public bool CanMove()
+    {
+        return movedThisTurn || playerStuned ? false : true;
     }
 }

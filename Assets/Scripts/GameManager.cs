@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
     // Funcion de Buscar Casillas Caminables
     public void FindWalkableTiles(UnidadesScript unidad)
     {
-        Debug.Log("aqui entra");
+        //Debug.Log("aqui entra");
         //Limpia las casillas disponibles
         CleanAllowedTiles();
 
