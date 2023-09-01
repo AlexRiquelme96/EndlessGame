@@ -21,7 +21,7 @@ public class UnidadesScript : MonoBehaviour
     [Header("UI")]
     [SerializeField] string unitName;
 
-    Vector3 lookForward= Vector3.zero;
+    private Vector3 lookForward= Vector3.zero;
 
     public void MoveTo(Stack<TileScript> path)
     {
