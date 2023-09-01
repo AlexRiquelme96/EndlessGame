@@ -1772,6 +1772,7 @@ MonoBehaviour:
   moveSpeed: 3
   movedThisTurn: 0
   playerStuned: 0
+  lerpDuration: 500
   unitName: 
 --- !u!23 &197294967
 MeshRenderer:
@@ -13886,6 +13887,7 @@ MonoBehaviour:
   tileLayer:
     serializedVersion: 2
     m_Bits: 64
+  gmBusy: 0
   destinationTile: {fileID: 0}
   activePosition: {fileID: 0}
   allowedTile: []

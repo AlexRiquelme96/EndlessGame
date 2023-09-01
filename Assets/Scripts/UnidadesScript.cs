@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class UnidadesScript : MonoBehaviour
@@ -15,60 +16,18 @@ public class UnidadesScript : MonoBehaviour
     [Header("Movement")]
     [SerializeField] bool movedThisTurn = false;
     [SerializeField] bool playerStuned = false;
+    [SerializeField] float lerpDuration;
 
     [Header("UI")]
     [SerializeField] string unitName;
 
-    Vector3 lookForward = Vector3.zero;
-    Vector3 speed = Vector3.zero;
+    Vector3 lookForward= Vector3.zero;
 
     public void MoveTo(Stack<TileScript> path)
     {
         movedThisTurn = true;
 
-        StartCoroutine(MoveUnitCoroutine());
-
-        IEnumerator MoveUnitCoroutine()
-        {
-            //Debug.Log("entra a la corrutina de movimiento");
-            while (path.Count > 0)
-            {
-                //Saca el primer elemento del Stack
-                TileScript tile = path.Peek();
-
-                Vector3 nextPosition = tile.transform.position - new Vector3 (0, tile.transform.position.y, 0);
-                
-                Vector3 playerPosition = transform.position - new Vector3 (0,transform.position.y,0);
-
-                float moveDistance = Vector3.Distance(playerPosition, nextPosition);
-
-                // Debug.Log(moveDistance);
-
-                if (moveDistance >= 0.05f)
-                {
-                    LookForward(nextPosition, playerPosition);
-                    HorizontalSpeedMovement();
-
-                    //Que el personaje mire hacia delante
-                    transform.forward = lookForward;
-                    playerPosition += speed * Time.deltaTime; 
-                }
-                else
-                {
-                    playerPosition = nextPosition;
-                    path.Pop();
-                }
-
-                yield return null;
-            }
-        }
-    }
-
-    private void HorizontalSpeedMovement()
-    {
-        Debug.Log("forward" + transform.forward);
-        speed = transform.forward * moveSpeed;
-        Debug.Log("velocidad " + speed);
+        StartCoroutine(MoveUnitCoroutine(path));
     }
 
     internal TileScript GetActiveTile()
@@ -96,5 +55,29 @@ public class UnidadesScript : MonoBehaviour
     public bool CanMove()
     {
         return movedThisTurn || playerStuned ? false : true;
+    }
+    IEnumerator MoveUnitCoroutine(Stack<TileScript> path)
+    {
+        //Debug.Log("entra a la corrutina de movimiento");
+        while (path.Count > 0)
+        {
+            //Saca el primer elemento del Stack
+            TileScript tile = path.Peek();
+            Vector3 startPosition = transform.position;
+            Vector3 nextPosition = tile.transform.position - new Vector3(0, tile.transform.position.y - startPosition.y, 0);
+
+            float timeElapsed = 0;
+            while (timeElapsed < lerpDuration)
+            {
+                LookForward(nextPosition, startPosition);
+                transform.position = Vector3.Lerp(startPosition, nextPosition, timeElapsed / lerpDuration);
+                timeElapsed += Time.deltaTime;
+            }
+            transform.position = nextPosition;
+            path.Pop();
+            yield return null;
+        }
+        GameManager.Instance.GMBusy(false);
+        GameManager.Instance.CleanAllowedTiles();
     }
 }

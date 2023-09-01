@@ -5,24 +5,48 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public enum States
+    {
+        Move,
+        Atack,
+        Waiting
+    }
+
     [Header("Selection")]
     [SerializeField] UnidadesScript selectedPlayer;
     [SerializeField] bool playerIsSelected = false;
     [SerializeField] bool readyToMove = false;
 
+    States actualState = States.Waiting;
 
-    //[Header("Movement")]
+
 
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        actualState = States.Move;
     }
 
     // Update is called once per frame
     void Update()
     {
+        switch (actualState)
+        {
+            case States.Move:
+                PlayerMoves();
+                break;
+        }
+
+    }
+
+    //Funcion de control de Movimiento
+    private void PlayerMoves()
+    {
+        if (GameManager.Instance.Busy())
+        {
+            return;
+        }
         if (Input.GetMouseButton(0))
         {
             if (TryFindPlayer(Input.mousePosition))
@@ -31,7 +55,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                if (selectedPlayer != null && selectedPlayer.CanMove()) 
+                if (selectedPlayer != null && selectedPlayer.CanMove())
                 {
                     readyToMove = TryGetDestination(Input.mousePosition);
                 }
@@ -40,10 +64,9 @@ public class PlayerController : MonoBehaviour
         if (readyToMove)
         {
             TryMoveToDestination();
+            readyToMove = false;
         }
     }
-
-
 
     // Funcion para intentar seleccionar un personaje
     private bool TryFindPlayer(Vector3 selectionPosition)

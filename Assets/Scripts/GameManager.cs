@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     [Header("General Parameters")]
     [SerializeField] float checkDistance = 2f;
     [SerializeField] LayerMask tileLayer;
+    [SerializeField] bool gmBusy;
 
     [Header("Movement")]
     [SerializeField] TileScript destinationTile;
@@ -99,16 +100,14 @@ public class GameManager : MonoBehaviour
         activePosition.Actual = true;
     }
 
-    private void CleanAllowedTiles()
+    internal void CleanAllowedTiles()
     {
         foreach (TileScript c in allowedTile)
         {
             c.InitializeTiles();
         }
         allowedTile.Clear();
-
-
-        //activePosition = null;
+        activePosition = null;
     }
 
     //Funcion de Buscar todas las Casillas
@@ -190,7 +189,18 @@ public class GameManager : MonoBehaviour
         //Si no hay camino calculado, no pasa nada
         if (calculatedPath.Count == 0) return;
 
+        gmBusy = true;
         unidad.MoveTo(calculatedPath);
 
+    }
+
+    internal void GMBusy(bool Busy)
+    {
+        gmBusy = Busy;
+    }
+
+    internal bool Busy()
+    {
+        return gmBusy;
     }
 }
