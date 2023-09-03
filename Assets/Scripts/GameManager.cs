@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -39,16 +40,9 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        //Si se Apreta la Tecla L
-        if (Input.GetKeyUp(KeyCode.L)) 
-        {
-            //Activa la Funcion de Buscar Casillas Caminables
-            FindWalkableTiles(null);
-        }
-
         if (allowedTile.Count > 0)
         {
-            PathViewTo(Input.mousePosition);
+            PathViewTo(Mouse.current.position.ReadValue());
         }
     }
 

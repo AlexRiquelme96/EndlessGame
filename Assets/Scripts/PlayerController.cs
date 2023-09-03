@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
@@ -18,9 +19,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] bool readyToMove = false;
 
     InputController inputController;
+    InputAction clickAction;
 
 
     States actualState = States.Waiting;
+
+    private void Awake()
+    {
+        inputController = new InputController();
+    }
 
 
 
@@ -29,6 +36,17 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         actualState = States.Move;
+    }
+
+    private void OnEnable()
+    {
+        clickAction = inputController.UI.Click;
+        inputController.UI.Enable();
+    }
+
+    private void OnDisable()
+    {
+        inputController.UI.Disable();
     }
 
     // Update is called once per frame
@@ -50,9 +68,9 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-        if (Input.GetMouseButton(0))
+        if (clickAction.ReadValue<float>() ==1)
         {
-            if (TryFindPlayer(Input.mousePosition))
+            if (TryFindPlayer(Mouse.current.position.ReadValue()))
             {
                 GameManager.Instance.FindWalkableTiles(selectedPlayer);
             }
@@ -60,11 +78,11 @@ public class PlayerController : MonoBehaviour
             {
                 if (selectedPlayer != null && selectedPlayer.CanMove())
                 {
-                    readyToMove = TryGetDestination(Input.mousePosition);
+                    readyToMove = TryGetDestination((Mouse.current.position.ReadValue()));
                 }
             }
         }
-        if (readyToMove && Input.GetMouseButton(0))
+        if (readyToMove)
         {
             TryMoveToDestination();
             readyToMove = false;

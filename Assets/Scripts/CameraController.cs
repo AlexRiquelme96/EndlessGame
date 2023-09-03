@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
@@ -17,6 +18,8 @@ public class CameraController : MonoBehaviour
     [SerializeField][Range (0,10)] private float movementTime;
     [SerializeField][Range (0,2)] private float normalSpeed;
     [SerializeField][Range (0,10)] private float fastSpeed;
+    [SerializeField] private Vector3 dragPosition;
+    [SerializeField] private Vector3 actualDragPosition;
 
     [Header("Position-Configuration")]
     [SerializeField] private Vector3 actualPosition;
@@ -24,6 +27,9 @@ public class CameraController : MonoBehaviour
     [Header("Rotation-Configuration")]
     [SerializeField] private Quaternion actualRotation;
     [SerializeField][Range(0, 2)] private float rotationSpeed;
+    [SerializeField] private Vector3 inicialRotPosition;
+    [SerializeField] private Vector3 actualRotPosition;
+    [SerializeField] bool mouseClicked= false;
 
     [Header("Zoom-Configuration")]
     [SerializeField] private Vector3 actualZoom;
@@ -33,7 +39,8 @@ public class CameraController : MonoBehaviour
 
     InputController inputController;
     InputAction inputAction;
-    InputAction UIAction;
+    InputAction scrollAction;
+    InputAction clickAction;
 
 
     private void Awake()
@@ -55,10 +62,16 @@ public class CameraController : MonoBehaviour
     private void OnEnable()
     {
         inputAction = inputController.Player.Move;
-        UIAction = inputController.UI.ScrollWheel;
+        scrollAction = inputController.UI.ScrollWheel;
+        clickAction = inputController.UI.Click;
+
         inputController.Player.Enable();
         inputController.UI.Enable();
+
+        inputController.UI.Click.performed += OnClicked;
     }
+
+
 
     private void OnDisable()
     {
@@ -74,7 +87,7 @@ public class CameraController : MonoBehaviour
 
     void MouseController()
     {
-        Vector2 scrollValue = UIAction.ReadValue<Vector2>();
+        Vector2 scrollValue = scrollAction.ReadValue<Vector2>();
 
         if (scrollValue.y > 0)
         {
@@ -87,9 +100,53 @@ public class CameraController : MonoBehaviour
             actualZoom.y = Mathf.Clamp(actualZoom.y, minZoom, maxZoom);
         }
 
-    }
+        float clickValue = clickAction.ReadValue<float>();
 
-    void MovementManager()
+        if (!mouseClicked)
+        {
+            //rotacion
+            inicialRotPosition = Mouse.current.position.ReadValue();
+        }
+        if (mouseClicked)
+        {
+
+            actualRotPosition = Mouse.current.position.ReadValue();
+
+            Vector3 dif = inicialRotPosition - actualRotPosition;
+            inicialRotPosition = actualRotPosition;
+            actualRotation *= Quaternion.Euler(Vector3.up * - dif.x / 5);
+            }
+        if (!mouseClicked)
+        {
+            //drag & drop
+            Plane plane = new Plane(Vector3.up, Vector3.zero);
+            Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+            float hit;
+
+            if (plane.Raycast(ray, out hit))
+            {
+                dragPosition = ray.GetPoint(hit);
+
+            }
+        }
+        if (mouseClicked)
+        {
+            //drag & drop
+            Plane plane = new Plane(Vector3.up, Vector3.zero);
+            Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+            float hit;
+
+            if (plane.Raycast(ray, out hit))
+            {
+                actualDragPosition = ray.GetPoint(hit);
+                actualPosition = transform.position + dragPosition - actualDragPosition;
+            }
+
+        }
+    }
+        
+
+        void MovementManager()
     {
         Vector2 action = inputAction.ReadValue<Vector2>();
 
@@ -129,5 +186,22 @@ public class CameraController : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, actualPosition , Time.deltaTime * movementTime);
         transform.rotation = Quaternion.Lerp(transform.rotation, actualRotation, Time.deltaTime * movementTime);
         cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition,actualZoom, Time.deltaTime * movementTime);
+    }
+
+    private void OnClicked(InputAction.CallbackContext inputContext)
+    {
+        var phase = inputContext.phase;
+
+        switch (phase)
+        {
+            case InputActionPhase.Started:
+                break;
+            case InputActionPhase.Performed:
+                mouseClicked = !mouseClicked;
+                break;
+            case InputActionPhase.Canceled:
+                break;
+
+        }
     }
 }
