@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEditor;
 using UnityEngine;
 
@@ -17,6 +18,7 @@ public class GameManager : MonoBehaviour
     [Header("Movement")]
     [SerializeField] TileScript destinationTile;
     [SerializeField] TileScript activePosition;
+    [SerializeField] UnidadesScript moveDistance;
 
     GameObject[] tiles;
 
@@ -51,9 +53,9 @@ public class GameManager : MonoBehaviour
     }
 
     // Funcion de Buscar Casillas Caminables
+    //TODO: Implementar el Move Distance ** * * * * * * * ** * * ** * ***********************************************
     public void FindWalkableTiles(UnidadesScript unidad)
     {
-        //Debug.Log("aqui entra");
         //Limpia las casillas disponibles
         CleanAllowedTiles();
 
@@ -69,16 +71,16 @@ public class GameManager : MonoBehaviour
 
         queue.Enqueue(activePosition);
         activePosition.Visited = true;
-
+        //TODO: Implementar el Move Distance ** * * * * * * * ** * * ** * ***********************************************
         while (queue.Count > 0)
         {
             TileScript analizedTile = queue.Dequeue();
             allowedTile.Add(analizedTile);
             analizedTile.Selectable = true;
 
-            //if (analizedTile.Distance < unidad.moveDistance)
-            if (analizedTile.Distance < 5)
+            if (analizedTile.Distance < 4)
             {
+                //Debug.Log(moveDistance.MoveDistance);
                 foreach (TileScript adjacentTile in analizedTile.Adjacent)
                 {
                     if (!adjacentTile.Visited)
@@ -93,6 +95,7 @@ public class GameManager : MonoBehaviour
         }
 
     }
+    //TODO: Implementar el Move Distance ** * * * * * * * ** * * ** * ***********************************************
 
     private void GetActivePosition(UnidadesScript unidad)
     {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using UnityEngine;
 
@@ -22,6 +23,8 @@ public class UnidadesScript : MonoBehaviour
     [SerializeField] string unitName;
 
     private Vector3 lookForward= Vector3.zero;
+
+    public int MoveDistance { get { return moveDistance; } set { moveDistance = value; } }
 
     public void MoveTo(Stack<TileScript> path)
     {
@@ -67,6 +70,7 @@ public class UnidadesScript : MonoBehaviour
             Vector3 nextPosition = tile.transform.position - new Vector3(0, tile.transform.position.y - startPosition.y, 0);
 
             float timeElapsed = 0;
+
             while (timeElapsed < lerpDuration)
             {
                 LookForward(nextPosition, startPosition);

@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] bool playerIsSelected = false;
     [SerializeField] bool readyToMove = false;
 
+    InputController inputController;
+
+
     States actualState = States.Waiting;
 
 
@@ -61,7 +64,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-        if (readyToMove)
+        if (readyToMove && Input.GetMouseButton(0))
         {
             TryMoveToDestination();
             readyToMove = false;
