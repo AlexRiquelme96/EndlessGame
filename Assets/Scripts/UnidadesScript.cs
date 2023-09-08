@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class UnidadesScript : MonoBehaviour
 {
+    public float actualHP1;
+    public float maxHP1;
     [Header("Atributes")]
     [SerializeField] int actualHP;
     [SerializeField] int maxHP;
@@ -25,6 +27,28 @@ public class UnidadesScript : MonoBehaviour
     private Vector3 lookForward= Vector3.zero;
 
     public int MoveDistance { get { return moveDistance; } set { moveDistance = value; } }
+
+    GUImanager GUImnr;
+
+    void Start()
+    {
+        this.GUImnr = GetComponent<GUImanager>();
+    }
+
+    private void Update()
+    {
+        if(Input.GetKey("up"))
+        {
+            increaseHP(5);
+        }
+        else if(Input.GetKey("down"))
+        {
+            decreaseHP(5);
+        }
+    }
+
+
+
 
     public void MoveTo(Stack<TileScript> path)
     {
@@ -84,4 +108,33 @@ public class UnidadesScript : MonoBehaviour
         GameManager.Instance.GMBusy(false);
         GameManager.Instance.CleanAllowedTiles();
     }
+    public void increaseHP(int increase)
+    {
+        if((this.actualHP1 + increase) < this.maxHP1)
+        {
+            this.actualHP1 += increase;
+        }
+        else
+        {
+            this.actualHP1 = this.maxHP1;
+
+        }
+        this.GUImnr.updateHpBar(this.actualHP1, this.maxHP1);
+
+    }
+    public void decreaseHP(int decrease)
+    {
+        if((this.actualHP1 - decrease) > 0)
+        {
+            this.actualHP1 -= decrease;
+        }
+        else
+        {
+            this.actualHP1 = 0;
+
+        }
+        this.GUImnr.updateHpBar(this.actualHP1, this.maxHP1);
+
+    }
+
 }

@@ -139,4 +139,9 @@ public class PlayerController : MonoBehaviour
     {
         GameManager.Instance.MoveUnitInCalculatedPath(selectedPlayer);
     }
+
+    private void PlayerAtacks()
+    {
+        
+    }
 }
